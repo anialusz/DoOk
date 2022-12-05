@@ -6,6 +6,8 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import com.bumptech.glide.Glide
+import com.example.dook.MainActivity
 import com.example.dook.databinding.SecondFragmentBinding
 
 class SecondFragment : Fragment() {
@@ -21,4 +23,16 @@ class SecondFragment : Fragment() {
         return binding.root
     }
 
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        viewModel.currentAstronomicPicture.observe(viewLifecycleOwner) { astronomicPicture ->
+            Glide.with(binding.root)
+                .load(astronomicPicture.url)
+                .centerCrop()
+                .into(binding.ivPicture)
+
+            (requireActivity() as MainActivity).supportActionBar?.title = astronomicPicture.title
+        }
+    }
 }
